@@ -10,7 +10,7 @@ import ws from 'ws';
 import websocketUrl from './websocket-url';
 import addWsMethod from './add-ws-method';
 
-export default function expressWs(app, httpServer, options = {}) {
+export default function expressWs(app, httpServer, options = {}, customWsServer) {
   let server = httpServer;
 
   if (server === null || server === undefined) {
@@ -40,7 +40,7 @@ export default function expressWs(app, httpServer, options = {}) {
   // allow caller to pass in options to WebSocketServer constructor
   const wsOptions = options.wsOptions || {};
   wsOptions.server = server;
-  const wsServer = new ws.Server(wsOptions);
+  const wsServer = customWsServer || new ws.Server(wsOptions);
 
   wsServer.on('connection', (socket, request) => {
     if ('upgradeReq' in socket) {
